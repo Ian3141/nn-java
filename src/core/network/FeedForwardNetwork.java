@@ -15,9 +15,12 @@ public class FeedForwardNetwork {
 
 	public double learningRate = DEFAULT_LEARNING_RATE;
 
+	/**
+	 * Creates a {@code FeedForwardNetwork} given layer sizes
+	 * @param layers the sizes of the layers, in order
+	 */
 	public FeedForwardNetwork(FeedForwardNetworkLayer... layers) {
 		this.layers = layers;
-
 	}
 
 	public void setLearningRate(double lr) {
@@ -43,7 +46,7 @@ public class FeedForwardNetwork {
 
 			totalError += errorFunction.getError(output, tgts[i]);
 
-			double[] errorDerivatives = ArrayOps.binaryOp(output, tgts[i], errorFunction.derivativeFunction);
+			double[] errorDerivatives = ArrayOps.binaryOp(output, tgts[i], errorFunction::derivative);
 
 			for(int l = layers.length - 1; l > 0; l--)
 				errorDerivatives = layers[l].backpropagate(errorDerivatives, layers[l-1].output);	
@@ -82,6 +85,12 @@ public class FeedForwardNetwork {
 		return error;
 	}
 
+	/**
+	 * Creates a standard {@code FeedForwardNetwork} given an activation function and layer sizes
+	 * @param activation the activation function of the network
+	 * @param layerSizes the sizes of the layers
+	 * @return the network
+	 */
 	public static FeedForwardNetwork createStandardNetwork(Activation activation, int... layerSizes) {
 		StandardFeedForwardLayer[] layers = new StandardFeedForwardLayer[layerSizes.length-1];
 		for(int i = 0; i < layerSizes.length-1; i++) layers[i] = new StandardFeedForwardLayer(layerSizes[i], layerSizes[i+1], activation);

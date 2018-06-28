@@ -1,21 +1,12 @@
 package util.error;
 
-import java.util.function.BinaryOperator;
 import util.ops.ArrayOps;
 
 public class MeanSquaredErrorFunction extends ErrorFunction {
-
-	public MeanSquaredErrorFunction() {
-		derivativeFunction = new BinaryOperator<Double>() {
-			@Override
-			/**
-			 * @param t The observed output
-			 * @param u The target output
-			 */
-			public Double apply(Double t, Double u) {
-				return (t-u);
-			}
-		};
+	
+	@Override
+	public double derivative(double observed, double target) {
+		return observed - target;
 	}
 
 	@Override
